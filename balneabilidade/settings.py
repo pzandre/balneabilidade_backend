@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "test")
+SECRET_KEY = os.getenv("SECRET_KEY", "secretKey")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.getenv("DEBUG", 0))
@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     "rest_framework_api_key",
     "corsheaders",
     "django_filters",
-    "django_crontab",
     "location",
 ]
 
@@ -170,8 +169,3 @@ REST_FRAMEWORK = {
 }
 
 WEATHER_REPORT_API_KEY = os.getenv("WEATHER_REPORT_API_KEY")
-
-CRONJOBS = [
-    ("0 */3 * * *", "location.utils.get_and_update_location_conditions"),
-    ("*/5 * * * *", "location.utils.update_weather_reports"),
-]
