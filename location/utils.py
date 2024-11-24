@@ -89,7 +89,7 @@ def upsert_weather_report(city: City):
         report.save()
     except WeatherReport.DoesNotExist:
         WeatherReport.objects.create(
-            temperature=temperature, cmainondition=condition, city=city
+            temperature=temperature, condition=condition, city=city
         )
 
 

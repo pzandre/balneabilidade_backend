@@ -6,3 +6,4 @@ whitenoise
 django-filter
 djangorestframework-api-key
 requests
+django-crontab
