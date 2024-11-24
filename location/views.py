@@ -8,7 +8,7 @@ from location.utils import get_and_update_location_conditions, update_weather_re
 
 
 class LocationListAPIView(ListAPIView):
-    queryset = Location.objects.all()
+    queryset = Location.objects.all().order_by("name")
     serializer_class = LocationSerializer
     filterset_fields = ["city__name"]
 
