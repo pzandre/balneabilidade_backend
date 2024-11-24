@@ -1,0 +1,8 @@
+Django
+psycopg2-binary
+djangorestframework
+django-cors-headers
+whitenoise
+django-filter
+djangorestframework-api-key
+requests
