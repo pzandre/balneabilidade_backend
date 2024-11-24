@@ -19,7 +19,7 @@
 
 - Use [Vercel](https://vercel.com) to host this app.
 - Use [Supabase](https://supabase.com/) for a free database (use the transaction port 5432 instead of the pooler port 6543).
-- Use [Val Town](https://www.val.town) to manage cronjobs that will update the Weather and Locations (Celery Beat is an option, but it's not possible to do it in Vercel)
+- Use [Val Town](https://www.val.town) to manage cronjobs (located in `./cronjob_scripts`) that will update the Weather and Locations (Celery Beat is an option, but it's not possible to do it in Vercel)
 
 ## Documentation
 
