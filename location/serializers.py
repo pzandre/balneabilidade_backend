@@ -2,10 +2,17 @@ from rest_framework import serializers
 
 
 class LocationSerializer(serializers.Serializer):
-    name = serializers.CharField()
-    latitude = serializers.DecimalField(max_digits=9, decimal_places=6)
-    longitude = serializers.DecimalField(max_digits=9, decimal_places=6)
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(source="name")
+    description = serializers.SerializerMethodField()
+    latitude = serializers.FloatField()
+    longitude = serializers.FloatField()
     is_good = serializers.BooleanField()
+
+    def get_description(self, obj):
+        if obj.is_good:
+            return "Praia própria para banho"
+        return "Praia imprópria para banho"
 
 
 class WeatherReportSerializer(serializers.Serializer):
