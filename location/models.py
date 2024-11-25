@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.db import models
 from redis import Redis
@@ -5,12 +7,19 @@ from redis import Redis
 
 class AbstractClearCacheMixin(models.Model):
     def clear_cache(self):
-        redis = Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
+        redis = Redis(
+            host=settings.REDIS_HOST,
+            port=settings.REDIS_PORT,
+            username=settings.REDIS_USER,
+            password=settings.REDIS_PASSWORD,
+        )
         try:
             keys = redis.keys(f"*{self.cache_key}*")
+            if not keys:
+                return
             redis.delete(*keys)
         except Exception as e:
-            print(f"Error while clearing cache: {e}")
+            logging.error(f"Error while clearing cache: {e}")
         finally:
             redis.close()
 

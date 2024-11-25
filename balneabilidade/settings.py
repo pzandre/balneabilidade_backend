@@ -104,13 +104,16 @@ DATABASES = {
     }
 }
 
-REDIS_HOST = os.getenv("REDIS_HOST", "redis")
-REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+REDIS_URL = os.getenv("REDIS_URL", "")
+REDIS_USER = REDIS_URL.split("://")[1].split(":")[0]
+REDIS_PASSWORD = REDIS_URL.split(":")[2].split("@")[0]
+REDIS_HOST = REDIS_URL.split("@")[1].split(":")[0]
+REDIS_PORT = REDIS_URL.split(":")[3]
 
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}",
+        "LOCATION": REDIS_URL,
     }
 }
 
