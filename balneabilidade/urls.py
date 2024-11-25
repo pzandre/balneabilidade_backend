@@ -20,7 +20,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-urlpatterns = [path("api/", include("location.urls"))]
+from balneabilidade.views import privacy_policy_view
+
+urlpatterns = [
+    path("api/", include("location.urls")),
+    path("privacy-policy/", privacy_policy_view, name="privacy-policy"),
+]
 
 if settings.DEBUG:
     urlpatterns += (path("admin/", admin.site.urls),)
