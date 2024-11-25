@@ -61,7 +61,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": ["balneabilidade/templates"],
-        "APP_DIRS": False,
+        "APP_DIRS": DEBUG,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -194,6 +194,12 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework_api_key.permissions.HasAPIKey",),
     "PAGE_SIZE": 20,
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "5/minute",
+    },
 }
 
 WEATHER_REPORT_API_KEY = os.getenv("WEATHER_REPORT_API_KEY")
