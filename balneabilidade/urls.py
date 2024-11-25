@@ -20,9 +20,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from balneabilidade.views import privacy_policy_view
+from balneabilidade.views import HealthCheckView, privacy_policy_view
 
 urlpatterns = [
+    path("", HealthCheckView.as_view(), name="health-check"),
     path("api/", include("location.urls")),
     path("privacy-policy/", privacy_policy_view, name="privacy-policy"),
 ]
