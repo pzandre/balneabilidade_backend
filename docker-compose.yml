@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: "postgres:17.0-alpine"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+  web:
+    build: .
+    depends_on:
+      - redis
+      - postgres
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/usr/src/app
+    command: python manage.py runserver 0.0.0.0:8000

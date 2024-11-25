@@ -1,6 +1,20 @@
 from django.db import models
 
 
+class AbstractClearCacheMixin(models.Model):
+    def clear_cache(self):
+        from django.core.cache import cache
+
+        cache.delete(self.cache_key)
+
+    def save(self, *args, **kwargs):
+        self.clear_cache()
+        return super().save(*args, **kwargs)
+
+    class Meta:
+        abstract = True
+
+
 class AbstractCreatedMixin(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -59,12 +73,14 @@ class City(AbstractCreatedUpdatedMixin):
         ]
 
 
-class Location(AbstractCreatedUpdatedMixin):
+class Location(AbstractCreatedUpdatedMixin, AbstractClearCacheMixin):
     name = models.CharField(max_length=100)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     is_good = models.BooleanField(default=True)
+
+    cache_key = "locations"
 
     def __str__(self):
         return f"{self.name} - {self.city}"
@@ -75,7 +91,7 @@ class Location(AbstractCreatedUpdatedMixin):
         ]
 
 
-class WeatherReport(AbstractUpdatedMixin):
+class WeatherReport(AbstractUpdatedMixin, AbstractClearCacheMixin):
     CONDITION_CHOICES = (
         ("sunny", "sunny"),
         ("cloudy", "cloudy"),
@@ -87,6 +103,8 @@ class WeatherReport(AbstractUpdatedMixin):
     city = models.OneToOneField(City, on_delete=models.CASCADE)
     temperature = models.DecimalField(max_digits=5, decimal_places=2)
     condition = models.CharField(max_length=6, choices=CONDITION_CHOICES)
+
+    cache_key = "weather_reports"
 
     def __str__(self):
         return f"{self.city} - {self.temperature}°C - {self.condition}"

@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.response import Response
@@ -12,12 +14,17 @@ class LocationListAPIView(ListAPIView):
     serializer_class = LocationSerializer
     filterset_fields = ["city__name"]
 
+    @method_decorator(cache_page(60 * 60 * 24, key_prefix="locations"))
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
 
 class WeatherReportAPIView(GenericAPIView):
     queryset = WeatherReport.objects.all()
     serializer_class = WeatherReportSerializer
     filterset_fields = ["city__name"]
 
+    @method_decorator(cache_page(60 * 60, key_prefix="weather_reports"))
     def get(self, request, *args, **kwargs):
         obj = self.filter_queryset(self.get_queryset()).last()
         if not obj:
