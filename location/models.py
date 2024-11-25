@@ -1,15 +1,22 @@
+from django.conf import settings
 from django.db import models
+from redis import Redis
 
 
 class AbstractClearCacheMixin(models.Model):
     def clear_cache(self):
-        from django.core.cache import cache
-
-        cache.delete(self.cache_key)
+        redis = Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
+        try:
+            keys = redis.keys(f"*{self.cache_key}*")
+            redis.delete(*keys)
+        except Exception as e:
+            print(f"Error while clearing cache: {e}")
+        finally:
+            redis.close()
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         self.clear_cache()
-        return super().save(*args, **kwargs)
 
     class Meta:
         abstract = True
