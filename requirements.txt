@@ -8,3 +8,4 @@ djangorestframework-api-key==3.0.0
 requests==2.32.3
 redis==5.2.0
 hiredis==3.0.0
+beautifulsoup4==4.12.3

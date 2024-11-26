@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from location.models import City, Country, Location, State, WeatherReport
+from location.models import City, CityURL, Country, Location, State, WeatherReport
 
 
 class LocationAdmin(admin.ModelAdmin):
@@ -12,6 +12,7 @@ class LocationAdmin(admin.ModelAdmin):
 
 
 admin.site.register(City)
+admin.site.register(CityURL)
 admin.site.register(Country)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(State)

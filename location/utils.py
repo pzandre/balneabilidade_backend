@@ -1,12 +1,15 @@
 import html
 import random
 import re
+from datetime import date
 from decimal import Decimal
+from typing import Optional
 
 import requests
+from bs4 import BeautifulSoup
 from django.conf import settings
 
-from location.models import City, Location, WeatherReport
+from location.models import City, CityURL, Location, WeatherReport
 
 
 def get_useragent():
@@ -24,19 +27,100 @@ _useragent_list = [
 ]
 
 
+def transform_date(date_str: str) -> date:
+    month_map = {
+        "janeiro": 1,
+        "fevereiro": 2,
+        "março": 3,
+        "abril": 4,
+        "maio": 5,
+        "junho": 6,
+        "julho": 7,
+        "agosto": 8,
+        "setembro": 9,
+        "outubro": 10,
+        "novembro": 11,
+        "dezembro": 12,
+    }
+
+    date_part = date_str.split(", ")[1]
+
+    date_obj = date(
+        year=int(date_part.split()[-1]),
+        month=month_map[date_part.split()[-3]],
+        day=int(date_part.split()[0]),
+    )
+    return date_obj
+
+
+def parse_date_html(html_text: str) -> Optional[str]:
+    date_pattern = r"Data de Publicação: ([^<]+)"
+    match = re.search(date_pattern, html_text)
+    if not match:
+        return
+    date_str = match.group(1)
+    return date_str
+
+
 def parse_location_html(html_text: str) -> list[tuple[str, str]]:
-    pattern = r"(Praia\sd\w{1,2}\s[\w\s]+)\s-\s.*?\((.*?)\)"
+    pattern = r"Praia\sd\w{1,2}\s([\w\s]+)\s-\s.* - (.+)(<br\s*\/?>)?"
     matches = re.findall(pattern, html_text, re.IGNORECASE)
     match_list = []
     for match in matches:
-        beach_name = match[0].strip()
-        status = match[1].strip()
-        match_list.append((html.unescape(beach_name), html.unescape(status)))
+        beach_name = html.unescape(match[0].strip())
+        status = (
+            html.unescape(match[1].strip())
+            .replace("<br />", "")
+            .replace("<br/>", "")
+            .replace("<br>", "")
+        )
+        match_list.append((beach_name, status))
     return match_list
 
 
+def assert_is_most_recent(last_posted_at: date, html_text: str) -> tuple[bool, date]:
+    parsed_date_str = parse_date_html(html_text)
+    parsed_date = transform_date(parsed_date_str)
+    return parsed_date >= last_posted_at, parsed_date
+
+
+def query_location_url(url: str) -> str:
+    response = requests.get(
+        url,
+        headers={"User-Agent": get_useragent()},
+    )
+    response.raise_for_status()
+    return response.text
+
+
+def get_all_balneabilidade_urls(html_text: str) -> list[str]:
+    soup = BeautifulSoup(html_text, "html.parser")
+    div = soup.find("div", class_="list-group list-group-legislacao")
+    urls = [a["href"] for a in div.find_all("a", href=True)]
+    return urls
+
+
+def get_updated_url(city: City) -> str:
+    city_url = CityURL.objects.get(city=city)
+    last_posted_at = city_url.posted_at
+    query_url = city_url.query_url
+    raw_publications = query_location_url(query_url)
+    balneabilidade_urls = get_all_balneabilidade_urls(raw_publications)
+    for url in balneabilidade_urls:
+        html_text = query_location_url(url)
+        is_most_recent, new_last_posted_at = assert_is_most_recent(
+            last_posted_at, html_text
+        )
+        if is_most_recent:
+            city_url.url = url
+            city_url.posted_at = new_last_posted_at
+            city_url.save()
+            return url
+    return city_url.url
+
+
 def get_locations_html_response() -> str:
-    url = "https://www.guarapari.es.gov.br/pagina/popup/2086"
+    url = get_updated_url(City.objects.first())
     response = requests.get(
         url,
         headers={"User-Agent": get_useragent()},
@@ -101,7 +185,15 @@ def infer_location_condition(condition: str) -> bool:
 def update_location_condition(location_name: str, condition: str):
     is_good = infer_location_condition(condition)
     try:
-        location = Location.objects.get(name=location_name)
+        if location_name.startswith("Morro"):
+            location_name = f"Praia do {location_name}"
+            location = Location.objects.get(name=location_name)
+        else:
+            location = Location.objects.filter(
+                name__unaccent__icontains=location_name
+            ).first()
+        if not location:
+            return
         location.is_good = is_good
         location.save()
     except Location.DoesNotExist:
