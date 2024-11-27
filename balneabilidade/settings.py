@@ -115,9 +115,7 @@ use_ssl = False
 try:
     cert_path = os.path.join(BASE_DIR, "cert.crt")
     with open(cert_path, "r") as f:
-        b64_cert = f.read()
-        cert = b64decode(b64_cert).decode("utf-8")
-    use_ssl = True
+        use_ssl = bool(f.read())
 except Exception as e:
     logging.error(e)
 
