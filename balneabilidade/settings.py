@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import logging
 import os
+from base64 import b64decode
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -108,16 +110,35 @@ WSGI_APPLICATION = "balneabilidade.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+use_ssl = False
+
+try:
+    b64_cert = os.getenv("POSTGRES_SSLROOTCERT", "")
+    cert = b64decode(b64_cert).decode("utf-8")
+    cert_path = os.path.join(BASE_DIR, "cert.crt")
+    with open(cert_path, "w") as f:
+        f.write(cert)
+    use_ssl = True
+except Exception as e:
+    logging.error(e)
+
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB"),
+        "NAME": os.getenv("POSTGRES_DATABASE"),
         "HOST": os.getenv("POSTGRES_HOST"),
         "PORT": os.getenv("POSTGRES_PORT"),
         "USER": os.getenv("POSTGRES_USER"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
     }
 }
+
+if use_ssl:
+    DATABASES["default"]["OPTIONS"] = {
+        "sslmode": "require",
+        "sslrootcert": cert_path,
+    }
 
 REDIS_URL = os.getenv("REDIS_URL", "")
 REDIS_USER = REDIS_URL.split("://")[1].split(":")[0]
