@@ -28,12 +28,12 @@ SECRET_KEY = os.getenv("SECRET_KEY", "secretKey")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.getenv("DEBUG", 0))
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
-
+ALLOWED_HOSTS = ("*",)
 # Application definition
 
 INSTALLED_APPS = []
 MIDDLEWARE = [
+    "balneabilidade.middleware.VercelDynamicAllowedHostsMiddleware",
     "balneabilidade.middleware.DisableClientSideCacheMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
