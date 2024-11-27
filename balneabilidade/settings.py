@@ -113,15 +113,13 @@ WSGI_APPLICATION = "balneabilidade.wsgi.application"
 use_ssl = False
 
 try:
-    b64_cert = os.getenv("POSTGRES_SSLROOTCERT", "")
-    cert = b64decode(b64_cert).decode("utf-8")
     cert_path = os.path.join(BASE_DIR, "cert.crt")
     with open(cert_path, "w") as f:
-        f.write(cert)
+        b64_cert = f.read()
+        cert = b64decode(b64_cert).decode("utf-8")
     use_ssl = True
 except Exception as e:
     logging.error(e)
-
 
 DATABASES = {
     "default": {
