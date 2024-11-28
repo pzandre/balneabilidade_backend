@@ -5,7 +5,6 @@
             "use": "@vercel/python",
             "config": {
                 "maxLambdaSize": "15mb",
-                "maxDuration": 60,
                 "runtime": "python3.12"
             }
         },
@@ -24,7 +23,8 @@
         },
         {
             "src": "/(.*)",
-            "dest": "balneabilidade/wsgi.py"
+            "dest": "balneabilidade/wsgi.py",
+            "maxDuration": 60
         }
     ]
 }
