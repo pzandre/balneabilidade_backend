@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from rest_framework import status
@@ -5,8 +6,16 @@ from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.response import Response
 
 from location.models import Location, WeatherReport
-from location.serializers import LocationSerializer, WeatherReportSerializer
-from location.utils import get_and_update_location_conditions, update_weather_reports
+from location.serializers import (
+    LocationSerializer,
+    RestoreDBSerializer,
+    WeatherReportSerializer,
+)
+from location.utils import (
+    call_cloud_run_endpoint,
+    get_and_update_location_conditions,
+    update_weather_reports,
+)
 
 
 class LocationListAPIView(ListAPIView):
@@ -48,4 +57,26 @@ class LocationConditionCronJobAPIView(GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         get_and_update_location_conditions()
+        return Response(status=status.HTTP_201_CREATED)
+
+
+class DumpDBCronJobAPIView(GenericAPIView):
+    queryset = Location.objects.none()
+
+    def post(self, request, *args, **kwargs):
+        url = settings.CLOUD_RUN_ENDPOINT + "/management/initiate_backup_process"
+        call_cloud_run_endpoint(url)
+        return Response(status=status.HTTP_201_CREATED)
+
+
+class RestoreDBAPIView(GenericAPIView):
+    queryset = Location.objects.none()
+    serializer_class = RestoreDBSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        url = settings.CLOUD_RUN_ENDPOINT + "/management/initiate_restore_process"
+        call_cloud_run_endpoint(url, serializer.validated_data)
         return Response(status=status.HTTP_201_CREATED)

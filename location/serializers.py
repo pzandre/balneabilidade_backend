@@ -18,3 +18,8 @@ class LocationSerializer(serializers.Serializer):
 class WeatherReportSerializer(serializers.Serializer):
     temperature = serializers.DecimalField(max_digits=5, decimal_places=1)
     condition = serializers.CharField()
+
+
+class RestoreDBSerializer(serializers.Serializer):
+    key = serializers.CharField()
+    bucket_name = serializers.CharField()

@@ -1,4 +1,5 @@
 import html
+import json
 import random
 import re
 from datetime import date
@@ -8,6 +9,8 @@ from typing import Optional
 import requests
 from bs4 import BeautifulSoup
 from django.conf import settings
+from google.auth.transport.requests import Request
+from google.oauth2 import service_account
 
 from location.models import City, CityURL, Location, WeatherReport
 
@@ -210,3 +213,18 @@ def get_and_update_location_conditions():
 def update_weather_reports():
     for city in City.objects.all():
         upsert_weather_report(city)
+
+
+def call_cloud_run_endpoint(url: str, data: dict = dict()):
+    credentials = service_account.IDTokenCredentials.from_service_account_info(
+        info=json.loads(settings.GCP_SA_KEY),
+        target_audience=settings.CLOUD_RUN_ENDPOINT,
+    )
+    request = Request()
+    credentials.refresh(request)
+    headers = {
+        "Authorization": f"Bearer {credentials.token}",
+        "Content-Type": "application/json",
+    }
+    response = requests.post(url, headers=headers, json=data)
+    response.raise_for_status()

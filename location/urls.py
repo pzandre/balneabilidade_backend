@@ -1,8 +1,10 @@
 from django.urls import path
 
 from location.views import (
+    DumpDBCronJobAPIView,
     LocationConditionCronJobAPIView,
     LocationListAPIView,
+    RestoreDBAPIView,
     WeatherReportAPIView,
     WeatherReportCronJobAPIView,
 )
@@ -19,6 +21,16 @@ urlpatterns = [
         "management/weather/",
         WeatherReportCronJobAPIView.as_view(),
         name="weather-report-cron-job",
+    ),
+    path(
+        "management/initiate_backup_process/",
+        DumpDBCronJobAPIView.as_view(),
+        name="dump-db-cron-job",
+    ),
+    path(
+        "management/initiate_restore_process/",
+        RestoreDBAPIView.as_view(),
+        name="restore-db-api",
     ),
     path("locations/", LocationListAPIView.as_view(), name="location-list"),
     path("weather/", WeatherReportAPIView.as_view(), name="weather-report"),
