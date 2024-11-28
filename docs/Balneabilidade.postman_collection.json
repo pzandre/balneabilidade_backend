@@ -114,6 +114,193 @@
 							"body": ""
 						}
 					]
+				},
+				{
+					"name": "Dump DB",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/management/initiate_backup_process/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"management",
+								"initiate_backup_process",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Dump DB",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/management/initiate_backup_process/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"initiate_backup_process",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 27 Nov 2024 18:26:36 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "54"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": {\n        \"success\": true,\n        \"error\": \"\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Restore DB",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"key\": \"latest.pgdump\",\n    \"bucket_name\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/management/initiate_restore_process/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"management",
+								"initiate_restore_process",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Restore DB",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"key\": \"latest.pgdump\",\n    \"bucket_name\": \"string\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/management/initiate_restore_process/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"initiate_restore_process",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 27 Nov 2024 18:26:36 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "54"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": {\n        \"success\": true,\n        \"error\": \"\"\n    }\n}"
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "Api-Key {{managementApiKey}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		},
@@ -126,7 +313,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/locations/",
+							"raw": "{{baseUrl}}/api/locations/?city__name={{city_name}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -138,8 +325,7 @@
 							"query": [
 								{
 									"key": "city__name",
-									"value": "{{city_name}}",
-									"disabled": true
+									"value": "{{city_name}}"
 								}
 							]
 						}
@@ -237,7 +423,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/weather/",
+							"raw": "{{baseUrl}}/api/weather/?city__name={{city_name}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -249,8 +435,7 @@
 							"query": [
 								{
 									"key": "city__name",
-									"value": "{{city_name}}",
-									"disabled": true
+									"value": "{{city_name}}"
 								}
 							]
 						}
@@ -338,23 +523,48 @@
 						}
 					]
 				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					},
+					{
+						"key": "value",
+						"value": "Api-Key {{apiKey}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
 			]
 		}
 	],
 	"auth": {
-		"type": "apikey",
-		"apikey": [
-			{
-				"key": "value",
-				"value": "Api-Key {{apiKey}}",
-				"type": "string"
-			},
-			{
-				"key": "key",
-				"value": "Authorization",
-				"type": "string"
-			}
-		]
+		"type": "inherit"
 	},
 	"event": [
 		{
@@ -386,8 +596,13 @@
 		},
 		{
 			"key": "apiKey",
-			"value": "Z06QjPMg.PlVc9sEO4I33qu5zBt3itHlEJN26nbmr",
+			"value": "",
 			"type": "default"
+		},
+		{
+			"key": "managementApiKey",
+			"value": "",
+			"type": "string"
 		}
 	]
 }
