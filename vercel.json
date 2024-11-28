@@ -23,8 +23,7 @@
         },
         {
             "src": "/(.*)",
-            "dest": "balneabilidade/wsgi.py",
-            "maxDuration": 60
+            "dest": "balneabilidade/wsgi.py"
         }
     ]
 }
