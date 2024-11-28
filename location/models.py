@@ -3,6 +3,13 @@ import logging
 from django.conf import settings
 from django.db import models
 from redis import Redis
+from rest_framework_api_key.models import AbstractAPIKey
+
+
+class ManagementAPIKey(AbstractAPIKey):
+    class Meta(AbstractAPIKey.Meta):
+        verbose_name = "Management API Key"
+        verbose_name_plural = "Management API Keys"
 
 
 class AbstractClearCacheMixin(models.Model):

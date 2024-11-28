@@ -6,6 +6,7 @@ from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.response import Response
 
 from location.models import Location, WeatherReport
+from location.permissions import HasManagementAPIKey
 from location.serializers import (
     LocationSerializer,
     RestoreDBSerializer,
@@ -45,6 +46,7 @@ class WeatherReportAPIView(GenericAPIView):
 class WeatherReportCronJobAPIView(GenericAPIView):
     queryset = WeatherReport.objects.all()
     serializer_class = WeatherReportSerializer
+    permission_classes = (HasManagementAPIKey,)
 
     def post(self, request, *args, **kwargs):
         update_weather_reports()
@@ -54,6 +56,7 @@ class WeatherReportCronJobAPIView(GenericAPIView):
 class LocationConditionCronJobAPIView(GenericAPIView):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
+    permission_classes = (HasManagementAPIKey,)
 
     def post(self, request, *args, **kwargs):
         get_and_update_location_conditions()
@@ -62,6 +65,7 @@ class LocationConditionCronJobAPIView(GenericAPIView):
 
 class DumpDBCronJobAPIView(GenericAPIView):
     queryset = Location.objects.none()
+    permission_classes = (HasManagementAPIKey,)
 
     def post(self, request, *args, **kwargs):
         url = settings.CLOUD_RUN_ENDPOINT + "/management/initiate_backup_process"
@@ -72,6 +76,7 @@ class DumpDBCronJobAPIView(GenericAPIView):
 class RestoreDBAPIView(GenericAPIView):
     queryset = Location.objects.none()
     serializer_class = RestoreDBSerializer
+    permission_classes = (HasManagementAPIKey,)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
