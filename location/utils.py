@@ -2,6 +2,7 @@ import html
 import json
 import random
 import re
+from base64 import b64decode
 from datetime import date
 from decimal import Decimal
 from typing import Optional
@@ -216,8 +217,10 @@ def update_weather_reports():
 
 
 def call_cloud_run_endpoint(url: str, data: dict = dict()):
+    b64_cred = settings.GCP_SA_KEY
+    transformed_sa = b64decode(b64_cred).decode("utf-8")
     credentials = service_account.IDTokenCredentials.from_service_account_info(
-        info=json.loads(settings.GCP_SA_KEY),
+        info=json.loads(transformed_sa),
         target_audience=settings.CLOUD_RUN_ENDPOINT,
     )
     request = Request()
