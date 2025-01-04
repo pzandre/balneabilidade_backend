@@ -5,9 +5,10 @@ from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.response import Response
 
-from location.models import Location, WeatherReport
+from location.models import CityURL, Location, WeatherReport
 from location.permissions import HasManagementAPIKey
 from location.serializers import (
+    LocationReportDetailSerializer,
     LocationSerializer,
     RestoreDBSerializer,
     WeatherReportSerializer,
@@ -41,6 +42,23 @@ class WeatherReportAPIView(GenericAPIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = self.serializer_class(obj)
         return Response(serializer.data)
+
+
+class LocationReportDetailAPIView(GenericAPIView):
+    queryset = CityURL.objects.all()
+    serializer_class = LocationReportDetailSerializer
+    filterset_fields = ["city__name"]
+
+    @method_decorator(cache_page(60 * 60 * 24, key_prefix="location_reports"))
+    def get(self, request, *args, **kwargs):
+        obj = self.get_queryset().last()
+        if not obj:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = self.serializer_class(obj)
+        return Response(serializer.data)
+
+
+# ~Cron Jobs~ #
 
 
 class WeatherReportCronJobAPIView(GenericAPIView):

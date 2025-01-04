@@ -20,6 +20,12 @@ class WeatherReportSerializer(serializers.Serializer):
     condition = serializers.CharField()
 
 
+class LocationReportDetailSerializer(serializers.Serializer):
+    city = serializers.CharField()
+    posted_at = serializers.DateField()
+    url = serializers.URLField()
+
+
 class RestoreDBSerializer(serializers.Serializer):
     key = serializers.CharField()
     bucket_name = serializers.CharField()
