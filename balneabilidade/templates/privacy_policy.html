@@ -2,78 +2,248 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            padding: 0;
-            color: #333;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
 
-        h1,
-        h2 {
-            color: #0056b3;
-        }
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        h1 {
-            font-size: 2em;
-        }
+    h1 {
+      color: #2c3e50;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+    }
 
-        h2 {
-            font-size: 1.5em;
-            margin-top: 20px;
-        }
+    h2 {
+      color: #34495e;
+      margin-top: 20px;
+    }
 
-        p {
-            margin: 10px 0;
-        }
-    </style>
+    h3 {
+      color: #34495e;
+      margin-top: 15px;
+    }
+
+    .language-selector {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      border-radius: 8px;
+      gap: 10px;
+    }
+
+    .language-option {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .flag-button {
+      margin-left: 15px;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
-    <h1>Privacy Policy</h1>
-    <p><strong>Effective Date:</strong> Nov. 25th of 2024</p>
+  <div class="container">
+    <div class="language-selector">
+      <img
+        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30'%3E%3Crect width='60' height='30' fill='%23012169'/%3E%3Cpath d='M0,0 L60,30 M60,0 L0,30' stroke='%23fff' stroke-width='6'/%3E%3Cpath d='M0,0 L60,30 M60,0 L0,30' stroke='%23C8102E' stroke-width='4'/%3E%3Cpath d='M30,0 L30,30 M0,15 L60,15' stroke='%23fff' stroke-width='10'/%3E%3Cpath d='M30,0 L30,30 M0,15 L60,15' stroke='%23C8102E' stroke-width='6'/%3E%3C/svg%3E"
+        alt="English" class="flag-button active" onclick="toggleLanguage('en', this)" title="English">
+      <label>
+        <input type="radio" name="language" value="en" checked onclick="toggleLanguage('en')"> English
+      </label>
+      <img
+        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 504'%3E%3Cpath fill='%2309B83E' d='M0 0h720v504H0z'/%3E%3Cpath fill='%23FED206' d='M360 72l288 180-288 180-288-180z'/%3E%3Ccircle fill='%2300449E' cx='360' cy='252' r='104'/%3E%3C/svg%3E"
+        alt="Português" class="flag-button" onclick="toggleLanguage('pt', this)" title="Português">
+      <label>
+        <input type="radio" name="language" value="pt" onclick="toggleLanguage('pt')"> Português
+      </label>
+    </div>
 
-    <p><strong>Balneabilidade</strong> values your privacy and is committed to protecting it. This privacy policy
-        outlines the types of information we do and do not collect when you use our app.</p>
+    <div id="english-content">
+      <h1>Privacy Policy</h1>
+      <p><strong>Effective Date:</strong> January 4, 2025</p>
 
-    <h2>1. No Special Permissions Required</h2>
-    <p>Our app does not request or require any special permissions to access your device's features or data.</p>
+      <p><strong>Balneabilidade Guarapari</strong> values your privacy and is committed to protecting it. This
+        privacy policy outlines how we handle information in our app.</p>
 
-    <h2>2. No Personal Data Collection</h2>
-    <p>We do not collect, store, or process any personal or sensitive information. This includes, but is not limited to:
-    </p>
-    <ul>
-        <li>Your name</li>
-        <li>Email address</li>
-        <li>Location</li>
+      <h2>1. Information Sources</h2>
+      <p>Our app displays data from third-party sources, including:</p>
+      <ul>
+        <li>Beach water quality data from the Municipality of Guarapari</li>
+        <li>Weather information from weather services</li>
+        <li>Map data from Google Maps</li>
+        <li>Municipal information via embedded website content</li>
+      </ul>
+
+      <h2>2. No Personal Data Collection</h2>
+      <p>We do not collect, store, or process any personal or sensitive information. This includes:</p>
+      <ul>
+        <li>Names or contact information</li>
+        <li>Location data</li>
         <li>Device information</li>
+        <li>Usage statistics</li>
         <li>Payment information</li>
-    </ul>
+      </ul>
 
-    <h2>3. No Data Sharing</h2>
-    <p>Since we do not collect or store any data, we do not share your data with any third parties.</p>
+      <h2>3. Third-Party Services</h2>
+      <p>While our app does not collect personal data, it utilizes third-party services:</p>
+      <ul>
+        <li>Google Maps may collect and process data according to their privacy policy</li>
+        <li>Weather services may collect usage data</li>
+        <li>The Municipality of Guarapari's embedded content may have its own data collection practices
+        </li>
+      </ul>
+      <p>We encourage users to review the privacy policies of these third-party services.</p>
 
-    <h2>4. Third-Party Services</h2>
-    <p>Our app does not integrate with or use third-party services that collect user data.</p>
+      <h2>4. App Permissions</h2>
+      <p>Our app requires only the minimum necessary permissions to function:</p>
+      <ul>
+        <li>Internet access to display third-party data</li>
+        <li>No access to device features, storage, or sensitive information</li>
+      </ul>
 
-    <h2>5. Children's Privacy</h2>
-    <p>Our app is safe for users of all ages. It does not collect any personal information or display content that could
-        be harmful to children.</p>
+      <h2>5. Data Security</h2>
+      <p>Since we do not collect or store any personal data:</p>
+      <ul>
+        <li>There is no risk of data breaches of personal information</li>
+        <li>No data backup or recovery procedures are needed</li>
+        <li>No data retention policies apply</li>
+      </ul>
 
-    <h2>6. Changes to This Privacy Policy</h2>
-    <p>We may update this privacy policy from time to time. Any changes will be posted within the app or on our website,
-        along with the updated effective date.</p>
+      <h2>6. User Communication</h2>
+      <p>The only channel for user feedback and communication is through the Play Store review system.</p>
 
-    <h2>7. Contact Us</h2>
-    <p>If you have any questions or concerns about this privacy policy, please contact us at:</p>
-    <p><strong>Email:</strong> andre.perez@aptechnology.dev</p>
+      <h2>7. Children's Privacy</h2>
+      <p>Our app is suitable for users of all ages as it:</p>
+      <ul>
+        <li>Does not collect personal information</li>
+        <li>Displays only public environmental and weather data</li>
+        <li>Contains no age-restricted content</li>
+      </ul>
 
-    <p>Thank you for using <strong>Balneabilidade</strong>. Your trust is important to us!</p>
+      <h2>8. Changes to Privacy Policy</h2>
+      <p>We reserve the right to update this privacy policy at any time. Continued use of the app after
+        changes constitutes acceptance of the modified policy.</p>
+
+      <h2>9. Contact Information</h2>
+      <p>For questions about this privacy policy, please contact us through the Play Store developer
+        contact information.</p>
+    </div>
+
+    <div id="portuguese-content" class="hidden">
+      <h1>Política de Privacidade</h1>
+      <p><strong>Data de Vigência:</strong> 4 de Janeiro de 2025</p>
+
+      <p>O <strong>Balneabilidade Guarapari</strong> valoriza sua privacidade e está comprometido em protegê-la.
+        Esta política de privacidade descreve como lidamos com as informações em nosso aplicativo.</p>
+
+      <h2>1. Fontes de Informação</h2>
+      <p>Nosso aplicativo exibe dados de fontes terceiras, incluindo:</p>
+      <ul>
+        <li>Dados de qualidade da água das praias da Prefeitura de Guarapari</li>
+        <li>Informações meteorológicas de serviços do tempo</li>
+        <li>Dados de mapas do Google Maps</li>
+        <li>Informações municipais via conteúdo incorporado do site</li>
+      </ul>
+
+      <h2>2. Não Coletamos Dados Pessoais</h2>
+      <p>Não coletamos, armazenamos ou processamos quaisquer informações pessoais ou sensíveis. Isso
+        inclui:</p>
+      <ul>
+        <li>Nomes ou informações de contato</li>
+        <li>Dados de localização</li>
+        <li>Informações do dispositivo</li>
+        <li>Estatísticas de uso</li>
+        <li>Informações de pagamento</li>
+      </ul>
+
+      <h2>3. Serviços de Terceiros</h2>
+      <p>Embora nosso aplicativo não colete dados pessoais, ele utiliza serviços de terceiros:</p>
+      <ul>
+        <li>O Google Maps pode coletar e processar dados de acordo com sua política de privacidade</li>
+        <li>Serviços meteorológicos podem coletar dados de uso</li>
+        <li>O conteúdo incorporado da Prefeitura de Guarapari pode ter suas próprias práticas de coleta
+          de dados</li>
+      </ul>
+      <p>Incentivamos os usuários a revisar as políticas de privacidade desses serviços terceiros.</p>
+
+      <h2>4. Permissões do Aplicativo</h2>
+      <p>Nosso aplicativo requer apenas as permissões mínimas necessárias para funcionar:</p>
+      <ul>
+        <li>Acesso à internet para exibir dados de terceiros</li>
+        <li>Sem acesso a recursos do dispositivo, armazenamento ou informações sensíveis</li>
+      </ul>
+
+      <h2>5. Segurança de Dados</h2>
+      <p>Como não coletamos ou armazenamos dados pessoais:</p>
+      <ul>
+        <li>Não há risco de violação de dados pessoais</li>
+        <li>Não são necessários procedimentos de backup ou recuperação de dados</li>
+        <li>Não se aplicam políticas de retenção de dados</li>
+      </ul>
+
+      <h2>6. Comunicação com Usuários</h2>
+      <p>O único canal para feedback e comunicação com usuários é através do sistema de avaliações da Play
+        Store.</p>
+
+      <h2>7. Privacidade de Crianças</h2>
+      <p>Nosso aplicativo é adequado para usuários de todas as idades, pois:</p>
+      <ul>
+        <li>Não coleta informações pessoais</li>
+        <li>Exibe apenas dados públicos ambientais e meteorológicos</li>
+        <li>Não contém conteúdo restrito por idade</li>
+      </ul>
+
+      <h2>8. Alterações na Política de Privacidade</h2>
+      <p>Reservamo-nos o direito de atualizar esta política de privacidade a qualquer momento. O uso
+        continuado do aplicativo após as alterações constitui aceitação da política modificada.</p>
+
+      <h2>9. Informações de Contato</h2>
+      <p>Para questões sobre esta política de privacidade, entre em contato conosco através das
+        informações de desenvolvedor na Play Store.</p>
+    </div>
+  </div>
+
+  <script>
+    function toggleLanguage(lang) {
+      const englishContent = document.getElementById('english-content');
+      const portugueseContent = document.getElementById('portuguese-content');
+
+      if (lang === 'en') {
+        englishContent.classList.remove('hidden');
+        portugueseContent.classList.add('hidden');
+      } else {
+        englishContent.classList.add('hidden');
+        portugueseContent.classList.remove('hidden');
+      }
+    }
+  </script>
 </body>
 
 </html>

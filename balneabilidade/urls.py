@@ -20,12 +20,17 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from balneabilidade.views import HealthCheckView, privacy_policy_view
+from balneabilidade.views import (
+    HealthCheckView,
+    privacy_policy_view,
+    terms_of_service_view,
+)
 
 urlpatterns = [
     path("", HealthCheckView.as_view(), name="health-check"),
     path("api/", include("location.urls")),
     path("privacy-policy/", privacy_policy_view, name="privacy-policy"),
+    path("terms-of-service/", terms_of_service_view, name="terms-of-service"),
 ]
 
 if settings.DEBUG:
