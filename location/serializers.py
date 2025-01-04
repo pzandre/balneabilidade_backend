@@ -21,8 +21,7 @@ class WeatherReportSerializer(serializers.Serializer):
 
 
 class LocationReportDetailSerializer(serializers.Serializer):
-    city = serializers.CharField()
-    posted_at = serializers.DateField()
+    posted_at = serializers.DateField(format="%d/%m/%Y")
     url = serializers.URLField()
 
 

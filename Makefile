@@ -32,3 +32,6 @@ shell: ## Run Django shell inside the API container
 
 showmigrations: ## Run the showmigrations inside the container
 	docker compose run --rm web python3 manage.py showmigrations
+
+flush_cache: ## Run the flush_cache inside the container
+	docker compose run --rm web python3 manage.py flush_cache
