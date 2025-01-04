@@ -5,7 +5,6 @@ import re
 from base64 import b64decode
 from datetime import date
 from decimal import Decimal
-from typing import Optional
 
 import requests
 from bs4 import BeautifulSoup
@@ -57,13 +56,21 @@ def transform_date(date_str: str) -> date:
     return date_obj
 
 
-def parse_date_html(html_text: str) -> Optional[str]:
+def parse_date_ddmmyyyy(date_str: str) -> date:
+    day, month, year = map(int, date_str.split("/"))
+    return date(year, month, day)
+
+
+def parse_date_html(html_text: str) -> tuple[str, bool]:
     date_pattern = r"Data de Publicação: ([^<]+)"
     match = re.search(date_pattern, html_text)
+    needs_transformation = True
     if not match:
-        return
+        date_pattern = "RESULTADO EM ([^<]+)"
+        match = re.search(date_pattern, html_text)
+        needs_transformation = False
     date_str = match.group(1)
-    return date_str
+    return date_str, needs_transformation
 
 
 def parse_location_html(html_text: str) -> list[tuple[str, str]]:
@@ -83,8 +90,11 @@ def parse_location_html(html_text: str) -> list[tuple[str, str]]:
 
 
 def assert_is_most_recent(last_posted_at: date, html_text: str) -> tuple[bool, date]:
-    parsed_date_str = parse_date_html(html_text)
-    parsed_date = transform_date(parsed_date_str)
+    parsed_date_str, needs_transformation = parse_date_html(html_text)
+    if needs_transformation:
+        parsed_date = transform_date(parsed_date_str)
+    else:
+        parsed_date = parse_date_ddmmyyyy(parsed_date_str)
     return parsed_date >= last_posted_at, parsed_date
 
 
@@ -98,9 +108,14 @@ def query_location_url(url: str) -> str:
 
 
 def get_all_balneabilidade_urls(html_text: str) -> list[str]:
+    default_balneabilidade_url = (
+        "https://www.guarapari.es.gov.br/pagina/ler/2086/balneabilidade"
+    )
     soup = BeautifulSoup(html_text, "html.parser")
     div = soup.find("div", class_="list-group list-group-legislacao")
-    urls = [a["href"] for a in div.find_all("a", href=True)]
+    urls = [a["href"] for a in div.find_all("a", href=True)] + [
+        default_balneabilidade_url
+    ]
     return urls
 
 
@@ -118,8 +133,7 @@ def get_updated_url(city: City) -> str:
         if is_most_recent:
             city_url.url = url
             city_url.posted_at = new_last_posted_at
-            city_url.save()
-            return url
+    city_url.save()
     return city_url.url
 
 

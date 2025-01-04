@@ -133,11 +133,13 @@ class WeatherReport(AbstractUpdatedMixin, AbstractClearCacheMixin):
         return f"{self.city} - {self.temperature}°C - {self.condition}"
 
 
-class CityURL(AbstractCreatedUpdatedMixin):
+class CityURL(AbstractCreatedUpdatedMixin, AbstractClearCacheMixin):
     city = models.OneToOneField(City, on_delete=models.CASCADE)
     query_url = models.URLField()
     posted_at = models.DateField()
     url = models.URLField()
+
+    cache_key = "location_reports"
 
     def __str__(self):
         return f"{self.city} - {self.url}"

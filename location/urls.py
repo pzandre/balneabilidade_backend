@@ -4,6 +4,7 @@ from location.views import (
     DumpDBCronJobAPIView,
     LocationConditionCronJobAPIView,
     LocationListAPIView,
+    LocationReportDetailAPIView,
     RestoreDBAPIView,
     WeatherReportAPIView,
     WeatherReportCronJobAPIView,
@@ -34,4 +35,7 @@ urlpatterns = [
     ),
     path("locations/", LocationListAPIView.as_view(), name="location-list"),
     path("weather/", WeatherReportAPIView.as_view(), name="weather-report"),
+    path(
+        "report/", LocationReportDetailAPIView.as_view(), name="location-report-detail"
+    ),
 ]
